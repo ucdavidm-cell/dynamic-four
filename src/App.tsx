@@ -1,122 +1,118 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import React, { useState } from "react";
+import Product from "./Product";
+import "./App.css";
+
+export default function App() {
+  const [page, setPage] = useState("products");
+  const [cart, setCart] = useState(0);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [rating, setRating] = useState(0);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const [sent, setSent] = useState(false);
+
+  function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setReviews([...reviews, { name, subject, message, rating }]);
+    setName("");
+    setEmail("");
+    setSubject("");
+    setMessage("");
+    setRating(0);
+    setSent(true);
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="website">
+      <nav>
+        <div className="navlinks">
+          <button onClick={() => setPage("products")}>Home</button>
+          <button onClick={() => setPage("products")}>New Arrivals</button>
+          <button onClick={() => setPage("products")}>Look Book</button>
+          <button onClick={() => setPage("products")}>About</button>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
 
-      <div className="ticks"></div>
+        <div className="logo">TF</div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        <div className="navlinks">
+          <button onClick={() => setPage("contact")}>Contact us</button>
+          <button onClick={() => alert("Sign up coming soon!")}>Sign up</button>
+          <button onClick={() => alert(`Cart: ${cart} items`)}>Cart ({cart})</button>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      </nav>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      {page === "products" ? (
+        <Product addToCart={() => setCart(cart + 1)} />
+      ) : (
+        <main className="contact">
+          <div className="contactbox">
+            <p>GET IN TOUCH</p>
+            <h1>CONTACT US</h1>
+            <p>HAVE A QUESTION, FEEDBACK, OR NEED
+              SUPPORT? WE'RE HERE TO HELP</p>
+          </div>
+
+          <div className="contactcontent">
+            <form onSubmit={submit}>
+              <input value={name} onChange={e => setName(e.target.value)}
+                placeholder="NAME*" required />
+
+              <input type="email" value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="EMAIL*" required />
+
+              <input value={subject}
+                onChange={e => setSubject(e.target.value)}
+                placeholder="SUBJECT" />
+
+              <textarea value={message}
+                onChange={e => setMessage(e.target.value)}
+                placeholder="MESSAGE*" required />
+
+              <div className="rating">
+                <p>RATE YOUR EXPERIENCE</p>
+                {[1, 2, 3, 4, 5].map(n => (
+                  <button type="button" key={n}
+                    className={rating >= n ? "active" : ""}
+                    onClick={() => setRating(n)}>★</button>
+                ))}
+              </div>
+
+              <button className="send" type="submit">
+                SEND MESSAGE
+              </button>
+
+              {sent && <p className="success">
+                Thank you! Your response was submitted.
+              </p>}
+            </form>
+
+            <div className="details">
+              <p>Insta-True.form.us</p>
+              <p>Number-201-998-0000</p>
+            </div>
+          </div>
+
+          {reviews.length > 0 && (
+            <div className="reviews">
+              <h2>Customer Responses</h2>
+              {reviews.map((r, i) => (
+                <div className="review" key={i}>
+                  <h3>{r.name}</h3>
+                  <p>{r.subject}</p>
+                  <p>{r.message}</p>
+                  <p>{"★".repeat(r.rating)}{"☆".repeat(5-r.rating)}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </main>
+      )}
+
+      <footer>TRUE FORM © 2026</footer>
+    </div>
+  );
 }
-
-export default App
