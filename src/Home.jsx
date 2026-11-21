@@ -13,7 +13,7 @@ function Home() {
         <a href="#home" className="logo">True Form</a>
 
         <div>
-          <a href="#contact">Contact</a>
+          <a href="#aboutus">About Us</a>
           <a href="#signup">Sign Up</a>
           <a href="#cart">Cart</a>
         </div>
